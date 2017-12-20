@@ -16,7 +16,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.conf.urls import url
-from arp.views import current_datetime, index, add,chaxun
+from arp.views import current_datetime, index, add, chaxun
 
 
 urlpatterns = {
