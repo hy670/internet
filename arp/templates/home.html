@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>HY测试</title>
+</head>
+<div>
+欢迎来到python
+<form action="/add/" methon="get">
+    加法: <input id="a" type="text" name="a">+<input id="b" type="text" name="b">
+   <button type="button" id='sum'>提交</button>
+</form>
+    <input id="result" type="text" name="result">
+
+    <button type="button" id="chaxun">查询</button>
+    <table id="person_result",border="1">
+
+        <tr>
+        <td>姓名</td>
+        <td>年龄</td>
+        </tr>
+
+    </table>
+</div>
+</body>
+<script type="text/javascript">
+$.ajaxSetup({
+    data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+});
+  $(document).ready(function(){
+  $("#sum").click(function(){
+    var a = $("#a").val();
+    var b = $("#b").val();
+    $.post("/add/",{'a':a,'b':b}, function(ret){$('#result').val(ret)})
+  });
+  $("#chaxun").click(function(){
+    $.getJSON("/chaxun/", function(ret){
+        for (var i = ret.length - 1; i >= 0; i--){
+             $('#person_result').append('<tr>\n' + '<td>'+ret[i].name+'</td>'+'<td>'+ret[i].age+'</td>'+' </tr>');
+        }
+
+
+    })
+  });
+ });
+
+</script>
+</html>
