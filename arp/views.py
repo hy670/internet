@@ -10,13 +10,21 @@ def add(request):
     a = request.POST['a']
     b = request.POST['b']
     c = person.objects.get_or_create(name=a, age=int(b))
-    return HttpResponse(str(c))
+    d = c[1]
+    return HttpResponse(str(d))
+
+
+def person_del(request):
+    aa = request.POST['aa']
+    c = person.objects.filter(id=aa).delete()
+    d = c[0]
+    return HttpResponse(str(d))
 
 
 def chaxun(request):
     allpersernlist = []
-    for i in person.objects.all():
-        dic = {'name': i.name, 'age': i.age}
+    for i in person.objects.all().values_list('id','name','age'):
+        dic = {'id': i[0], 'name': i[1], 'age': i[2]}
         allpersernlist.append(dic)
     return JsonResponse(allpersernlist, safe=False)
 

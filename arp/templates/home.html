@@ -1,40 +1,74 @@
 <!DOCTYPE html>
 <html >
 <head>
-    <script type="text/javascript" src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta charset="UTF-8">
     <title>Python测试</title>
 </head>
-<div>
-    <h1>欢迎来到Python</h1>
-    添加用户:姓名 <input id="a" type="text" > 年龄 <input id="b" type="text" >
-    <button type="button" id='sum'>提交</button>
-    <input id="result" type="text" >
+<div class="nav">
+<h1>欢迎来到Python</h1>
 </div>
-<div>
-    <button type="button" id="chaxun">查询</button>
-    <table id="person_result"  border="1">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3">
+        添加用户:姓名 <input id="a" class="form-control" type="text" placeholder="请输入姓名"> 年龄 <input id="b" class="form-control" type="text" placeholder="请输入年龄" >
+        <button type="button" id='sum'>提交</button>
+        </div>
+        <div class="col-xs-3">
+        删除用户:序号 <input id="aa" class="form-control" type="text" placeholder="请输入序号">
+        <button type="button" id='del'>提交</button>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <center><button type="button" id="chaxun" class="btn btn-primary btn-lg">查询</button></center>
+    <table id="person_result" class="table table-bordered" border="1">
         <tr>
-        <th width="150" >姓名</th>
-        <th width="150">年龄</th>
+            <th width="50" >序号</th>
+            <th width="150" >姓名</th>
+            <th width="150">年龄</th>
         </tr>
     </table>
 </div>
 <script type="text/javascript">
 $.ajaxSetup({
-    data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
 });
   $(document).ready(function(){
   $("#sum").click(function(){
     var a = $("#a").val();
     var b = $("#b").val();
-    $.post("/add/",{'a':a,'b':b}, function(ret){$('#result').val(ret)})
+    $.post("/add/",{'a':a,'b':b}, function(ret){
+        if (ret == "True") {
+            alert("成功")
+        }
+        else{
+            alert("失败")
+        }
+
+    });
+  });
+    $("#del").click(function(){
+    var aa = $("#aa").val();
+    var bb = $("#bb").val();
+    $.post("/person_del/",{'aa':aa,'bb':bb}, function(ret){
+        if (ret == "0") {
+            alert("用户不存在")
+        }
+        else{
+            alert("用户已删除")
+        }
+
+    });
   });
   $("#chaxun").click(function(){
       $('#person_result tr:gt(0)').remove();
       $.getJSON("/chaxun/", function(ret){
         for (var i = ret.length - 1; i >= 0; i--){
-             $('#person_result').append('<tr>\n' + '<td>'+ret[i].name+'</td>'+'<td>'+ret[i].age+'</td>'+' </tr>');
+             $('#person_result').append('<tr>\n' + '<td>'+ret[i].id+'</td>'+'<td>'+ret[i].name+'</td>'+'<td>'+ret[i].age+'</td>'+' </tr>');
         }
       })
   });
